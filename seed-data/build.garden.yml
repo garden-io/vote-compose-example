@@ -1,0 +1,5 @@
+kind: Build
+type: container
+name: seed-votes
+# spec:
+#   dockerfile: ./seed-data/Dockerfile

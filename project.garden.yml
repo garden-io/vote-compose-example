@@ -1,3 +1,37 @@
+kind: Run
+type: docker-run
+name: seed-votes
+description: |
+  Seed Postgres with some test data. We don't use the seed service in the compose project here, but reference
+  an image from a `container` Build instead.
+dependencies: [deploy.vote]
+spec:
+  projectName: vote
+  image: ${actions.build.seed-votes.outputs.deployment-image-id}
+  networks: ["front-tier"]
+
+---
+
+kind: Run
+type: docker-compose-exec
+name: clear-db
+dependencies: [deploy.db]
+spec:
+  service: db
+  projectName: vote
+  # TODO: Read username & db name from variables
+  command: [psql, -U, "postgres", -d, "postgres", "-c", "TRUNCATE VOTES"]
+
+---
+# kind: Run
+# type: docker-compose-run
+# name: seed-votes
+# dependencies: [deploy.vote]
+# spec:
+#   service: seed # From the Compose stack
+
+# ---
+
 apiVersion: garden.io/v1
 kind: Project
 name: vote
