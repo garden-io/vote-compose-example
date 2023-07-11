@@ -19,8 +19,7 @@ dependencies: [deploy.db]
 spec:
   service: db
   projectName: vote
-  # TODO: Read username & db name from variables
-  command: [psql, -U, "postgres", -d, "postgres", "-c", "TRUNCATE VOTES"]
+  command: [psql, -U, "${var.db.username}", -d, "${var.db.dbName}", "-c", "TRUNCATE VOTES"]
 
 ---
 # kind: Run
@@ -37,8 +36,11 @@ kind: Project
 name: vote
 environments:
   - name: local
-    # variables:
-    #   baseHostname: vote.local.demo.garden
+    variables:
+      db:
+        username: postgres
+        dbName: postgres
+      # db: vote.local.demo.garden
   # - name: remote
   #   variables:
   #     baseHostname: ${project.name}-testing-${var.userId}.dev-1.sys.garden
