@@ -12,6 +12,13 @@ spec:
 
 ---
 
+kind: Deploy
+disabled: ${environment.name == "local"}
+name: vote
+type: exec
+
+---
+
 kind: Run
 type: docker-compose-exec
 name: clear-db
